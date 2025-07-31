@@ -12,3 +12,11 @@ h1{
     font-weight: 400;
     font-style: normal;
 }
+button {
+    color: rgb(255, 255, 255);
+}
+
+button:hover {
+    color: rgb(221, 5, 5);
+    cursor: pointer;
+}

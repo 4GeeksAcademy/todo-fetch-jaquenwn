@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useRef } from 'react';
 
 const List = () => {
 
@@ -25,6 +25,8 @@ const List = () => {
     setTask(''); 
   };
    const items= taskList.length;
+   const noTasks = "There are no tasks, add one:)"
+   const yesTasks= items + " items left"
 
   return (
     <div className="card my-3 col-10" >
@@ -36,13 +38,13 @@ const List = () => {
           taskList.map((task, index) =>
             <div className="d-flex border-top" key={index} >
               <div className="col-11 text-start p-2">{task}</div>
-              <button className="d-flex border-0 text-danger bg-transparent " onClick={() => removeTask(index)}>x</button>
+              <button  className="d-flex border-0  bg-white col-1 p-2 " onClick={() => removeTask(index)}>x</button>
             </div>
           )
         }
       </div>
       <div className="card-footer text-start text-muted">
-        <small>{items} items left</small>
+        <small>{items === 0? noTasks: yesTasks}</small>
       </div>
     </div>
   )
