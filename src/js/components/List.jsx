@@ -36,30 +36,25 @@ const List = () => {
     }
   }
 
-  const removeTask = (index) => {
+  const removeTask = async(index) => {
     try {
-      const deleteTask = fetch(
-        "https://playground.4geeks.com/todo/todos/jaquenwn",
-        {
+      const deleteTask =await fetch( `https://playground.4geeks.com/todo/todos/${index}`,  {
           method: 'DELETE',
-          body: JSON.stringify(taskList[index]),
-          headers: {
-            'Content-Type': 'application/json'
-          }
+          headers: {  'Content-Type': 'application/json'  }
+        }  )
+        console.log (deleteTask)
+        if (deleteTask.status == 204) {
+          getList()
         }
-      )
     } catch (error) {
       console.log(error)
     }
-    let aux1 = [...taskList];
-    aux1.splice(index, 1);
-    setTaskList(aux1)
+
   }
 
   const newTask = async (e) => {
     if (e.key === "Enter") {
       e.preventDefault();
-      console.log(task.label)
       try {
         const postTask = await fetch("https://playground.4geeks.com/todo/todos/jaque", {
           method: 'POST',
@@ -70,15 +65,16 @@ const List = () => {
           headers: { 'Content-Type': 'application/json' }
         })
         console.log(postTask)
+        if (postTask.status == 201) {
+          getList()
+          setTask({
+            "label": "",
+            "is_done": false
+          });
+        }
       } catch (error) {
         console.log(error)
       }
-
-
-      setTask({
-        "label": "",
-        "is_done": false
-      });
     }
   }
   const items = taskList.length;
@@ -91,14 +87,14 @@ const List = () => {
   return (
     <div className="card my-3 col-10" >
       <form >
-        <input onKeyDown={(e) => newTask(e)} type="text" placeholder="What needs to be done?" className="border p-2 col-12" onChange={(e) => setTask(e.target.value)} value={task.label} />
+        <input onKeyDown={(e) => newTask(e)} type="text" placeholder="What needs to be done?" className="border p-2 col-12" onChange={(e) => setTask({ ...task, label: e.target.value })} value={task.label} />
       </form>
       <div className=" w-100 " >
         {
           taskList.map((task, index) =>
             <div className="d-flex border-top" key={index} >
               <div className="col-11 text-start p-2">{task.label}</div>
-              <button className="d-flex border-0  bg-white col-1 p-2 " onClick={() => removeTask(index)}> ✔</button>
+              <button className="d-flex border-0  bg-white col-1 p-2 " onClick={() => removeTask(task.id)}> ✔</button>
             </div>
           )
         }
